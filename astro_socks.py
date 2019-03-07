@@ -85,6 +85,6 @@ while (True):
     serial_in_data = getData()
     if (serial_in_data[0] != "#pause"):
         # uart is the micro:bit command for serial
-        uart.write('{},{},{},{}'.format(toe_reading, first_mid_reading, second_mid_reading, ankle_reading)+EOL)
+        uart.write(',{},{},{},{}'.format(toe_reading, first_mid_reading, second_mid_reading, ankle_reading)+EOL)
 
     sleep(DATA_RATE)
