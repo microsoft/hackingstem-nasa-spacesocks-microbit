@@ -25,12 +25,17 @@
 # ===---------------------------------------------------------------===
 
 from microbit import *
+import radio
 
 # Setup & Config
 display.off()  # Turns off LEDs to free up additional input pins
 uart.init(baudrate=9600)  # Sets serial baud rate
 DATA_RATE = 10 # Frequency of code looping
 EOL = '\n' # End of Line Character
+chan = 0 # Defualt channel number for radio
+radio.config(length=64, channel=chan)
+radio.on() # Turn on radio
+
 
 # These constants are the pins used on the micro:bit for the sensors
 TOE_SENSOR = pin0
@@ -81,10 +86,33 @@ def parseData(s):
 #------------------------------Main Program Loop------------------------------#
 #=============================================================================#
 while (True):
+    # Changes the radio channel
+    while button_a.is_pressed() and chan != 0:
+        chan -= 1
+        radio.config(channel=chan)
+        display.on()
+        display.show(chan, delay=500)
+        sleep(600)
+        display.off()
+    while button_b.is_pressed() and chan < 83:
+        chan += 1
+        radio.config(channel=chan)
+        display.on()
+        display.show(chan, delay=500)
+        sleep(600)
+        display.off()
+
     process_sensors()
     serial_in_data = getData()
+
+    # Create a string of the data to be sent
+    data_to_send = ",{},{},{},{}".format(toe_reading, first_mid_reading, second_mid_reading, ankle_reading)
+
     if (serial_in_data[0] != "#pause"):
+        # Send data to radio
+        radio.send(data_to_send)
+
         # uart is the micro:bit command for serial
-        uart.write(',{},{},{},{}'.format(toe_reading, first_mid_reading, second_mid_reading, ankle_reading)+EOL)
+        uart.write(data_to_send + EOL)
 
     sleep(DATA_RATE)
