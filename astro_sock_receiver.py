@@ -1,8 +1,8 @@
 from microbit import *
 import radio
 
+RADIO_LOCKOUT = pin16 
 
-DATA_SPEED = 10 # Frequency of code looping
 COMMA_COUNT = 4 # Count of expected commas for data integrity
 EOL = '\n' # End of Line Character
 chan = 0 # Defualt channel number for radio
@@ -15,14 +15,14 @@ radio.config(length=64, channel=chan)
 
 while True:    
     # Changes the radio channel
-    while button_a.is_pressed() and chan != 0:
+    while button_a.is_pressed() and chan != 0 and RADIO_LOCKOUT.read_digital():
         chan -= 1
         radio.config(channel=chan)
         display.on()
         display.show(chan, delay=500)
         sleep(600)
         display.off()
-    while button_b.is_pressed() and chan < 83:
+    while button_b.is_pressed() and chan < 83 and RADIO_LOCKOUT.read_digital():
         chan += 1
         radio.config(channel=chan)
         display.on()

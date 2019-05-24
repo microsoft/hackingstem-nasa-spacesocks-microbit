@@ -11,7 +11,8 @@
 #  Pin 1 = First Mid-foot Sensor
 #  Pin 2 = Second Mid-foot Sensor
 #  Pin 3 = Ankle Sensor
-
+#  Pin 16 = radio lockout
+#  
 #  This project uses a BBC micro:bit microcontroller, information at:
 #  https://microbit.org/
 #
@@ -42,7 +43,7 @@ TOE_SENSOR = pin0
 FIRST_MID_SENSOR = pin1
 SECOND_MID_SENSOR = pin2
 ANKLE_SENSOR = pin3
-
+RADIO_LOCKOUT = pin16 
 
 def process_sensors():
     # Reads voltage of from each pin attached to a pressure sensor
@@ -87,14 +88,14 @@ def parseData(s):
 #=============================================================================#
 while (True):
     # Changes the radio channel
-    while button_a.is_pressed() and chan != 0:
+    while button_a.is_pressed() and chan != 0 and RADIO_LOCKOUT.read_digital():
         chan -= 1
         radio.config(channel=chan)
         display.on()
         display.show(chan, delay=500)
         sleep(600)
         display.off()
-    while button_b.is_pressed() and chan < 83:
+    while button_b.is_pressed() and chan < 83 and RADIO_LOCKOUT.read_digital():
         chan += 1
         radio.config(channel=chan)
         display.on()
