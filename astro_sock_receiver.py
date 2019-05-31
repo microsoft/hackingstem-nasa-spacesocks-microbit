@@ -14,22 +14,28 @@ radio.on() # Turns on radio
 radio.config(length=64, channel=chan)
 
 while True:    
-    # Changes the radio channel
-    while button_a.is_pressed() and chan != 0 and RADIO_LOCKOUT.read_digital():
-        chan -= 1
-        radio.config(channel=chan)
-        display.on()
-        display.show(chan, delay=500)
-        sleep(600)
-        display.off()
-    while button_b.is_pressed() and chan < 83 and RADIO_LOCKOUT.read_digital():
-        chan += 1
-        radio.config(channel=chan)
-        display.on()
-        display.show(chan, delay=500)
-        sleep(600)
-        display.off()
-    
+    elapsed_buttons_down_millis = 0
+    start_buttons_down_millis = running_time() 
+    while (elapsed_buttons_down_millis > 1000 and elapsed_buttons_down_millis < 11000) or (button_a.is_pressed() and button_b.is_pressed()):
+        elapsed_buttons_down_millis = running_time() - start_buttons_down_millis
+        if elapsed_buttons_down_millis > 1000 and elapsed_buttons_down_millis < 11000:
+            if not display.is_on():
+                display.on()  
+
+            if (button_a.was_pressed() or button_a.is_pressed()) and chan != 0 and not button_b.is_pressed():
+                chan -= 1
+                radio.config(channel=chan)
+            elif (button_b.was_pressed() or button_b.is_pressed()) and chan < 83 and not button_a.is_pressed():
+                chan += 1
+                radio.config(channel=chan)                
+            display.show(chan, delay=250, wait=True)
+            if chan > 9:
+                display.show("_")
+            sleep(250) 
+            
+    if display.is_on():
+        display.off() 
+            
     # Listen for radio data
     data_in = radio.receive()
 
