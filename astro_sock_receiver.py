@@ -1,7 +1,27 @@
+# ------------__ Hacking STEM astro_socks.py micro:bit __-----------
+#  For use with the Astro Socks lesson plan available from 
+#  Microsoft Education Workshop at http://aka.ms/hackingSTEM
+#
+#  Overview: This project relays incoming data from radio to serial
+#  
+#  To set radio channel, hold both buttons for 1 second and then use 
+#  buttons to increment/decrement channel. See astro_socks.py 
+#  for the companion transmitter program.
+#
+#  This project uses a BBC micro:bit microcontroller, information at:
+#  https://microbit.org/
+#
+#  Comments, contributions, suggestions, bug reports, and feature
+#  requests are welcome! For source code and bug reports see:
+#  http://github.com/microsoft/[TODO github path to Hacking STEM]
+#
+#  Copyright 2019, Jeremy Franklin-Ross & Adi Azulay
+#  Microsoft EDU Workshop - HackingSTEM
+#  MIT License terms detailed in LICENSE.txt
+# ===---------------------------------------------------------------===
+
 from microbit import *
 import radio
-
-RADIO_LOCKOUT = pin16 
 
 COMMA_COUNT = 4 # Count of expected commas for data integrity
 EOL = '\n' # End of Line Character
@@ -39,7 +59,7 @@ while True:
     # Listen for radio data
     data_in = radio.receive()
 
-	# Seperate the incoming radio data
+	# Checksum of commas for incoming radio data
     if data_in and data_in.count(",") == COMMA_COUNT:
 		uart.write(data_in + EOL)
 
