@@ -1,9 +1,9 @@
-# ------------__ Hacking STEM astro_socks.py micro:bit __-----------
-#  For use with the Astro Socks lesson plan available from 
-#  Microsoft Education Workshop at http://aka.ms/hackingSTEM
+# ------------__ Hacking STEM astro_socks.py micro:bit __-----------===
+#  For use with the Astro Socks lesson plan available from Microsoft 
+#  Education Workshop at http://aka.ms/hackingSTEM
 #
-#  Overview: This project reads voltage on 4 GPIO pins and writes those values
-#  to serial and radio.
+#  Overview: This project reads voltage on 4 GPIO pins and writes 
+#  those values to serial and radio.
 # 
 #  Pins:
 #  Pin 0 = Phalanges Sensor
@@ -11,6 +11,12 @@
 #  Pin 2 = Tarsals Sensor
 #  Pin 3 = Ankle Sensor
 #  
+#  How to get data:
+#  You may connect this microbit to USB directly or use the companion
+#  radio receiver program (astro_socks_receiver.py) to receive via
+#  radio.
+#
+#  Channel select:
 #  To set radio channel, hold both buttons for 1 second and then use 
 #  buttons to increment/decrement channel. See astro_socks_receiver.py 
 #  for the companion receiver program.
@@ -39,37 +45,29 @@ chan = 0 # Defualt channel number for radio
 radio.config(length=64, channel=chan)
 radio.on() # Turn on radio
 
-
-# These constants are the pins used on the micro:bit for the sensors
-TOE_SENSOR = pin0
-FIRST_MID_SENSOR = pin1
-SECOND_MID_SENSOR = pin2
-ANKLE_SENSOR = pin3
-
-def process_sensors():
-    # Reads voltage of from each pin attached to a pressure sensor
-    global toe_reading, first_mid_reading, second_mid_reading, ankle_reading
-    toe_reading = TOE_SENSOR.read_analog()
-    first_mid_reading = FIRST_MID_SENSOR.read_analog()
-    second_mid_reading = SECOND_MID_SENSOR.read_analog()
-    ankle_reading = ANKLE_SENSOR.read_analog()
-
 #=============================================================================#
 #------------------------------Main Program Loop------------------------------#
 #=============================================================================#
 while (True):
-    # Change radio channel
-    elapsed_buttons_down_millis = 0
-    start_buttons_down_millis = running_time() 
+    elapsed_buttons_down_millis = 0  # Reset button timer state
+    start_buttons_down_millis = running_time()  # Reset button timer state
+
+    # If both buttons have been held for over a second or 
+    # both button are currently being pressed, stay in while loop
     while (elapsed_buttons_down_millis > 1000 and elapsed_buttons_down_millis < 11000) or (button_a.is_pressed() and button_b.is_pressed()):
+        # check elapsed time
         elapsed_buttons_down_millis = running_time() - start_buttons_down_millis
+
+        # check elapsed time
         if elapsed_buttons_down_millis > 1000 and elapsed_buttons_down_millis < 11000:
             if not display.is_on():
                 display.on()  
 
+            # decrement if only button A is was or is pressed
             if (button_a.was_pressed() or button_a.is_pressed()) and chan != 0 and not button_b.is_pressed():
                 chan -= 1
                 radio.config(channel=chan)
+            # increment if only button B is was or is pressed
             elif (button_b.was_pressed() or button_b.is_pressed()) and chan < 83 and not button_a.is_pressed():
                 chan += 1
                 radio.config(channel=chan)                
@@ -81,15 +79,19 @@ while (True):
     if display.is_on():
         display.off() 
             
-
-    process_sensors()
+    # Read from each sensor
+    phalanges_reading = pin0.read_analog()
+    metatarsals_reading = pin1.read_analog()
+    tarsals_reading = pin2.read_analog()
+    ankle_reading = pin3.read_analog()
 
     # Create a string of the data to be sent
-    data_to_send = ",{},{},{},{}".format(toe_reading, first_mid_reading, second_mid_reading, ankle_reading)
+    data_to_send = ",{},{},{},{}".format(phalanges_reading, metatarsals_reading, tarsals_reading, ankle_reading)
 
     # Send data to radio
     radio.send(data_to_send)
 
+    # Also write out to Serial (so you can use radio or serial)
     # uart is the micro:bit command for serial
     uart.write(data_to_send + EOL)
 
