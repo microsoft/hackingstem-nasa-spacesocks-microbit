@@ -1,6 +1,15 @@
 # Introduction
 Micropython code for HackingSTEM Astro Socks lesson plan adapted for micro:bit
 
+
+**Note** that this project is designed to use 2 micro:bits since each board only supports up to 6 analog/pwm pins. It also allows for wireless testing.
+* astro_socks.py
+Captures the analog signals from the flex sensors and transmits this data over radio to the receiver micro:bit
+* astro_socks_receiver.py
+Receives data from the Gloastro_sock micro:bit and controls the servos in the mechanical hand. This one attaches to your laptop.
+
+Both micro:bits must be on the same radio channel for this to work. To change the channel press both buttons until a number appears. This is the channel number. Set this to the same number on each micro:bit. If there are multiple projects going on in the same room choose a unique channel number for each astro_sock/receiver pair. It is also possible to for the receiver to cycle through each channel on a single receiver laptop.
+
 # Getting Started
 1. Download lesson assets at http://aka.ms/hackingSTEM
 1. Assemble your electronics
