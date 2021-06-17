@@ -11,7 +11,7 @@ Receives data from the Gloastro_sock micro:bit and controls the servos in the me
 Both micro:bits must be on the same radio channel for this to work. To change the channel press both buttons until a number appears. This is the channel number. Set this to the same number on each micro:bit. If there are multiple projects going on in the same room choose a unique channel number for each astro_sock/receiver pair. It is also possible to for the receiver to cycle through each channel on a single receiver laptop.
 
 # Getting Started
-1. Download lesson assets at http://aka.ms/hackingSTEM
+1. Download lesson assets at https://aka.ms/astrosocks
 1. Assemble your electronics
 1. Use [Mu](https://codewith.mu/) to flash astro_socks.py [micro:bit](https://microbit.org/) sensor microcontroller
 1. Use [Mu](https://codewith.mu/) to flash astro_socks_receiver.py to your receiver [micro:bit](https://microbit.org/) microcontroller
@@ -27,4 +27,4 @@ This project is licensed under the MIT open source license, see License. The MIT
 
 Fork away! Let us know what you build!
 
-**This is an archived repository.**
+http://aka.ms/hackingSTEM

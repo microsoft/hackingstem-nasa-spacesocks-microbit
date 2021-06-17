@@ -13,6 +13,7 @@
 #
 #  Comments, contributions, suggestions, bug reports, and feature
 #  requests are welcome! 
+#  https://github.com/microsoft/hackingstem-nasa-spacesocks-microbit
 #
 #  Copyright 2019, Jeremy Franklin-Ross & Adi Azulay
 #  Microsoft EDU Workshop - HackingSTEM
